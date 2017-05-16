@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="pvr.dvblink"
-  version="4.0.1"
+  version="4.1.4"
   name="DVBLink PVR Client"
   provider-name="DVBLogic">
-  <requires>
-    <c-pluff version="0.1"/>
-    <import addon="kodi.global.gui" version="@ADDON_GLOBAL_VERSION_GUI@"/>
-    <import addon="kodi.instance.pvr" version="@ADDON_INSTANCE_VERSION_PVR@"/>
-  </requires>
+  <requires>@ADDON_DEPENDS@</requires>
   <extension
     point="kodi.pvrclient"
     library_@PLATFORM@="@LIBRARY_FILENAME@"/>

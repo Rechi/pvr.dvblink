@@ -298,16 +298,6 @@ void ADDON_Destroy()
   SAFE_DELETE(GUI);
 }
 
-bool ADDON_HasSettings()
-{
-  return true;
-}
-
-unsigned int ADDON_GetSettings(ADDON_StructSetting ***sSet)
-{
-  return 0;
-}
-
 ADDON_STATUS ADDON_SetSetting(const char *settingName, const void *settingValue)
 {
   string str = settingName;
@@ -415,10 +405,6 @@ ADDON_STATUS ADDON_SetSetting(const char *settingName, const void *settingValue)
   return ADDON_STATUS_OK;
 }
 
-void ADDON_FreeSettings()
-{
-}
-
 ADDON_STATUS ADDON_CreateInstance(int instanceType, const char* instanceID, KODI_HANDLE instance, KODI_HANDLE* addonInstance)
 {
   return ADDON_STATUS_UNKNOWN;
@@ -450,6 +436,7 @@ void OnPowerSavingDeactivated()
 
 void GetCapabilities(PVR_ADDON_CAPABILITIES* pCapabilities)
 {
+<<<<<<< HEAD
   pCapabilities->bSupportsEPG = true;
   pCapabilities->bSupportsRecordings = true;
   pCapabilities->bSupportsRecordingsUndelete = false;
@@ -458,6 +445,17 @@ void GetCapabilities(PVR_ADDON_CAPABILITIES* pCapabilities)
   pCapabilities->bSupportsRadio = true;
   pCapabilities->bHandlesInputStream = true;
   pCapabilities->bSupportsChannelGroups = true;
+=======
+  if (dvblinkclient)
+  {
+    if (dvblinkclient->GetStatus())
+    {
+      dvblinkclient->GetAddonCapabilities(pCapabilities);
+      return PVR_ERROR_NO_ERROR;
+    }
+  }
+  return PVR_ERROR_SERVER_ERROR;
+>>>>>>> master
 }
 
 const char *GetBackendName(void)
@@ -468,8 +466,14 @@ const char *GetBackendName(void)
 
 const char *GetBackendVersion(void)
 {
-  static const char * strBackendVersion = "5.x";
-  return strBackendVersion;
+  if (dvblinkclient)
+  {
+    if (dvblinkclient->GetStatus())
+    {
+      return dvblinkclient->GetBackendVersion();
+    }
+  }
+  return "";
 }
 
 const char *GetConnectionString(void)
@@ -550,7 +554,7 @@ bool OpenLiveStream(const PVR_CHANNEL &channel)
 void CloseLiveStream(void)
 {
   if (dvblinkclient)
-    dvblinkclient->StopStreaming(true);
+    dvblinkclient->StopStreaming();
 }
 
 const char * GetLiveStreamURL(const PVR_CHANNEL &channel)
@@ -626,7 +630,7 @@ static bool dvblink_is_live()
 {
   if (dvblinkclient)
   {
-    return (dvblinkclient->GetBufferTimeEnd() - dvblinkclient->GetPlayingTime()) < 3; //add a margin of 3 seconds to the definition of "live"
+    return (dvblinkclient->GetBufferTimeEnd() - dvblinkclient->GetPlayingTime()) < 10; //add a margin of 10 seconds to the definition of "live"
   }
   return true;
 }
