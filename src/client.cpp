@@ -436,26 +436,13 @@ void OnPowerSavingDeactivated()
 
 void GetCapabilities(PVR_ADDON_CAPABILITIES* pCapabilities)
 {
-<<<<<<< HEAD
-  pCapabilities->bSupportsEPG = true;
-  pCapabilities->bSupportsRecordings = true;
-  pCapabilities->bSupportsRecordingsUndelete = false;
-  pCapabilities->bSupportsTimers = true;
-  pCapabilities->bSupportsTV = true;
-  pCapabilities->bSupportsRadio = true;
-  pCapabilities->bHandlesInputStream = true;
-  pCapabilities->bSupportsChannelGroups = true;
-=======
   if (dvblinkclient)
   {
     if (dvblinkclient->GetStatus())
     {
       dvblinkclient->GetAddonCapabilities(pCapabilities);
-      return PVR_ERROR_NO_ERROR;
     }
   }
-  return PVR_ERROR_SERVER_ERROR;
->>>>>>> master
 }
 
 const char *GetBackendName(void)
